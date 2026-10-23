@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaikh Iman — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-soft:#111111;
+    --card:#141414;
+    --card-border:rgba(255,255,255,0.12);
+    --text:#f5f5f5;
+    --text-dim:#8a8a8a;
+    --white:#ffffff;
+    --grad: linear-gradient(120deg, #ffffff, #a3a3a3 50%, #ffffff);
+    --grad-soft: linear-gradient(120deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.10));
+    --radius: 18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  ::selection{background:var(--white);color:#000;}
+
+  /* Ambient gradient blobs — signature element */
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(120px);
+    opacity:0.16;
+    z-index:0;
+    pointer-events:none;
+    transition:transform 0.6s ease-out;
+  }
+  .blob-1{width:480px;height:480px;background:var(--white);top:-150px;left:-100px;}
+  .blob-2{width:420px;height:420px;background:var(--white);bottom:0;right:-120px;}
+  .blob-3{width:380px;height:380px;background:var(--white);top:40%;left:50%;}
+
+  section{position:relative;z-index:1;padding:120px 8vw;}
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 8vw;
+    backdrop-filter:blur(16px);
+    background:rgba(10,10,18,0.55);
+    border-bottom:1px solid var(--card-border);
+  }
+  .logo{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:1.15rem;
+    color:var(--text);
+    letter-spacing:0.3px;
+  }
+  .nav-links{display:flex;gap:36px;list-style:none;}
+  .nav-links a{
+    color:var(--text-dim);text-decoration:none;font-size:0.92rem;font-weight:500;
+    position:relative;transition:color 0.25s;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;
+    background:var(--grad);transition:width 0.3s;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;align-items:flex-start;
+    padding-top:100px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;color:var(--white);
+    font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;
+    margin-bottom:20px;opacity:0;animation:fadeUp 0.8s ease forwards 0.1s;
+  }
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(2.8rem,7vw,5.5rem);
+    font-weight:700;line-height:1.05;
+    margin-bottom:24px;
+    opacity:0;animation:fadeUp 0.8s ease forwards 0.3s;
+  }
+  .hero h1 .name-highlight{
+    font-family:'Charter', 'Georgia', serif;
+    font-weight:700;
+    background:linear-gradient(120deg, #f2f2f5, #9a9aa2 45%, #e4e4e8 55%, #b8b8c0);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p{
+    max-width:560px;color:var(--text-dim);font-size:1.15rem;line-height:1.7;
+    margin-bottom:40px;
+    opacity:0;animation:fadeUp 0.8s ease forwards 0.5s;
+  }
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s ease forwards 0.7s;}
+  .btn{
+    padding:14px 30px;border-radius:100px;font-weight:600;font-size:0.95rem;
+    text-decoration:none;transition:transform 0.25s, box-shadow 0.25s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--grad);color:#000;}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px -8px rgba(255,255,255,0.25);}
+  .btn-outline{border:1px solid var(--card-border);color:var(--text);background:rgba(255,255,255,0.03);}
+  .btn-outline:hover{transform:translateY(-3px);border-color:var(--white);}
+
+  .socials{display:flex;gap:18px;margin-top:56px;opacity:0;animation:fadeUp 0.8s ease forwards 0.9s;}
+  .social-icon{
+    width:46px;height:46px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card);border:1px solid var(--card-border);
+    transition:transform 0.3s, background 0.3s, border-color 0.3s;
+  }
+  .social-icon svg{width:20px;height:20px;fill:var(--text-dim);transition:fill 0.3s;}
+  .social-icon:hover{transform:translateY(-5px) scale(1.08);border-color:var(--white);background:var(--grad-soft);}
+  .social-icon:hover svg{fill:var(--text);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+  /* SECTION HEADERS */
+  .section-label{
+    font-family:'JetBrains Mono',monospace;color:var(--white);
+    font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;
+  }
+  .section-title{
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);
+    font-weight:700;margin-bottom:50px;
+  }
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:280px 1fr;gap:60px;align-items:center;}
+  .avatar-wrap{
+    width:260px;height:260px;border-radius:50%;
+    position:relative;
+  }
+  .avatar-wrap img{
+    width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;
+  }
+  .about-text p{color:var(--text-dim);font-size:1.08rem;line-height:1.85;margin-bottom:16px;}
+  .about-text strong{color:var(--text);}
+  .stats{display:flex;gap:40px;margin-top:32px;}
+  .stat h3{
+    font-family:'Space Grotesk',sans-serif;font-size:2.2rem;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stat span{color:var(--text-dim);font-size:0.85rem;}
+
+  /* SKILLS */
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+  .skill-card{
+    background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+    padding:26px;transition:transform 0.3s, border-color 0.3s;
+  }
+  .skill-card:hover{transform:translateY(-6px);border-color:transparent;
+    box-shadow:0 20px 40px -20px rgba(255,255,255,0.15);}
+  .skill-card .icon{
+    width:44px;height:44px;border-radius:12px;background:var(--grad-soft);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--white);
+  }
+  .skill-card h4{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;margin-bottom:8px;}
+  .skill-card p{color:var(--text-dim);font-size:0.9rem;line-height:1.5;}
+
+  /* PROJECTS */
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
+  .project-card{
+    background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+    overflow:hidden;transition:transform 0.35s, box-shadow 0.35s;
+  }
+  .project-card:hover{transform:translateY(-8px);box-shadow:0 25px 50px -20px rgba(255,255,255,0.15);}
+  .project-thumb{
+    height:170px;background:var(--grad-soft);position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .project-thumb::before{
+    content:'</>';font-family:'JetBrains Mono',monospace;font-size:2.5rem;font-weight:700;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .project-body{padding:24px;}
+  .project-body h4{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;margin-bottom:10px;}
+  .project-body p{color:var(--text-dim);font-size:0.92rem;line-height:1.6;margin-bottom:16px;}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.75rem;padding:4px 10px;
+    border-radius:100px;border:1px solid var(--card-border);color:var(--white);
+  }
+  .project-links{display:flex;gap:16px;}
+  .project-links a{color:var(--text);text-decoration:none;font-size:0.88rem;font-weight:600;
+    display:flex;align-items:center;gap:6px;transition:color 0.25s;}
+  .project-links a:hover{color:var(--white);}
+
+  /* RESUME */
+  .resume-box{
+    background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+    padding:50px;text-align:center;position:relative;overflow:hidden;
+  }
+  .resume-box::before{
+    content:'';position:absolute;inset:0;background:var(--grad-soft);opacity:0.5;z-index:0;
+  }
+  .resume-box > *{position:relative;z-index:1;}
+  .resume-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;margin-bottom:12px;}
+  .resume-box p{color:var(--text-dim);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;}
+
+  /* CONTACT */
+  .contact-wrap{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+  }
+  .contact-info p{color:var(--text-dim);line-height:1.8;margin-bottom:28px;max-width:420px;}
+  .contact-item{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .contact-item .icon{
+    width:42px;height:42px;border-radius:12px;background:var(--card);border:1px solid var(--card-border);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .contact-item .icon svg{width:18px;height:18px;fill:var(--white);}
+  .contact-item a, .contact-item span{color:var(--text);text-decoration:none;font-size:0.95rem;}
+
+  form{display:flex;flex-direction:column;gap:16px;}
+  input, textarea{
+    background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+    padding:15px 18px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.95rem;
+    outline:none;transition:border-color 0.3s;
+  }
+  input:focus, textarea:focus{border-color:var(--white);}
+  textarea{resize:vertical;min-height:120px;}
+
+  footer{
+    text-align:center;padding:40px 8vw;color:var(--text-dim);font-size:0.85rem;
+    border-top:1px solid var(--card-border);position:relative;z-index:1;
+  }
+
+  @media(max-width:800px){
+    .nav-links{display:none;}
+    .about-grid, .contact-wrap{grid-template-columns:1fr;}
+    section{padding:90px 6vw;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+</style>
+</head>
+<body>
+
+
+<div class="blob blob-1" id="blob1"></div>
+<div class="blob blob-2" id="blob2"></div>
+<div class="blob blob-3" id="blob3"></div>
+
+<nav>
+  <div class="logo">Shaikh Iman</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <h1>Hi, I'm <span class="name-highlight">Shaikh Iman</span><br>I Build solutions through code.</h1>
+  <p>B.Tech (Information Technology) student passionate about turning ideas into clean, functional code. Currently learning DSA, web development, and exploring the world of software engineering.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="#resume" class="btn btn-outline">Get Resume</a>
+  </div> 
+  <div class="socials">
+    <a class="social-icon" href="https://linkedin.com/in/shaikh-iman-2912ai" target="_blank" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.07-.02-2.45-1.5-2.45-1.5 0-1.73 1.17-1.73 2.37v4.58h-3v-9h2.88v1.23h.04c.4-.75 1.38-1.5 2.83-1.5 3.03 0 3.48 1.99 3.48 4.59v4.68z"/></svg>
+    </a>
+    <a class="social-icon" href="https://github.com/imanshaikh2912" target="_blank" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.07.78 2.16v3.2c0 .31.21.66.79.55A10.51 10.51 0 0023.5 12c0-6.27-5.23-11.5-11.5-11.5z"/></svg>
+    </a>
+    <a class="social-icon" href="mailto:imanshaikh2912@gmail.com" title="Gmail">
+      <svg viewBox="0 0 24 24"><path d="M20 4h-16c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2zm0 4l-8 5-8-5v-2l8 5 8-5v2z"/></svg>
+    </a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-label">01 · About</div>
+  <h2 class="section-title reveal">Who I Am</h2>
+  <div class="about-grid reveal">
+    <div class="avatar-wrap">
+      <img src="portfolio dp.jpeg" alt="Shaikh Iman">
+    </div>
+    <div class="about-text">
+      <p>I'm a <strong>1st year B.Tech Information Technology student</strong> at MGM University, Aurangabad, with a growing focus on <strong>Full Stack Development, Cybersecurity, Leadership,</strong> and <strong>Teamwork</strong>.</p>
+      <p>Right now, I'm deep diving into <strong>full stack development</strong> and building my problem-solving skills through <strong>Data Structures & Algorithms (DSA)</strong> — working toward becoming a well-rounded software developer.</p>
+      <div class="stats">
+        <div class="stat"><h3>1st</h3><span>Year Student</span></div>
+        <div class="stat"><h3>4+</h3><span>Tech Explored</span></div>
+        <div class="stat"><h3>∞</h3><span>Curiosity</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-label">02 · Skills</div>
+  <h2 class="section-title reveal">What I Work With</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="icon">&lt;/&gt;</div>
+      <h4>Full Stack Development</h4>
+      <p>HTML, CSS & JavaScript — building structured, responsive, and interactive web pages.</p>
+    </div>
+    <div class="skill-card">
+      <div class="icon">JS</div>
+      <h4>JavaScript</h4>
+      <p>Interactive front-end logic, DOM manipulation, and dynamic web behavior.</p>
+    </div>
+    <div class="skill-card">
+      <div class="icon">DS</div>
+      <h4>DSA</h4>
+      <p>Learning data structures & algorithms for problem-solving.</p>
+    </div>
+    <div class="skill-card">
+      <div class="icon">Git</div>
+      <h4>Git & GitHub</h4>
+      <p>Version control and collaborative project workflows.</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-label">03 · Projects</div>
+  <h2 class="section-title reveal">Things I've Built</h2>
+  <div class="projects-grid reveal" style="grid-template-columns:repeat(auto-fit,minmax(300px,380px));">
+    <div class="project-card">
+      <div class="project-thumb"></div>
+      <div class="project-body">
+        <h4>Personal Portfolio Website</h4>
+        <p>This website — designed and built from scratch to showcase my profile, skills, and journey as a 1st year IT student. More projects coming soon as I keep learning.</p>
+        <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+        <div class="project-links">
+          <a href="#" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="section-label">04 · Resume</div>
+  <h2 class="section-title reveal">My Resume</h2>
+  <div class="resume-box reveal">
+    <h3>Want the full picture?</h3>
+    <p>Download my latest resume to see my complete education, skills, and experience in detail.</p>
+    
+<a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+  View Resume ↗
+</a>
+
+<a href="resume.pdf" download class="btn btn-outline">
+  ⬇ Download Resume
+</a>
+
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-label">05 · Contact</div>
+  <h2 class="section-title reveal">Let's Connect</h2>
+  <div class="contact-wrap reveal">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M20 4h-16c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2zm0 4l-8 5-8-5v-2l8 5 8-5v2z"/></svg></div>
+        <a href="mailto:imanshaikh2912@gmail.com">imanshaikh2912@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.07-.02-2.45-1.5-2.45-1.5 0-1.73 1.17-1.73 2.37v4.58h-3v-9h2.88v1.23h.04c.4-.75 1.38-1.5 2.83-1.5 3.03 0 3.48 1.99 3.48 4.59v4.68z"/></svg></div>
+        <a href="https://linkedin.com/in/shaikh-iman-2912ai" target="_blank">linkedin.com/in/shaikh-iman-2912ai</a>
+      </div>
+      <div class="contact-item">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.07.78 2.16v3.2c0 .31.21.66.79.55A10.51 10.51 0 0023.5 12c0-6.27-5.23-11.5-11.5-11.5z"/></svg></div>
+        <a href="https://github.com/imanshaikh2912" target="_blank">github.com/imanshaikh2912</a>
+      </div>
+    </div>
+    <form id="contactForm">
+      <input type="text" id="fromName" placeholder="Your Name" required>
+      <input type="email" id="fromEmail" placeholder="Your Email" required>
+      <textarea id="msgBody" placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn btn-primary" style="border:none;cursor:pointer;">✉ Open in Mail App</button>
+      <p style="color:var(--text-dim);font-size:0.82rem;margin-top:-4px;">Clicking this will open your email app with the message ready to send.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  © 2026 Shaikh Iman. Built with HTML, CSS & JavaScript.
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // Contact form -> opens visitor's email client with pre-filled message
+  const contactForm = document.getElementById('contactForm');
+  contactForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('fromName').value;
+    const email = document.getElementById('fromEmail').value;
+    const message = document.getElementById('msgBody').value;
+    const subject = `Portfolio Contact from ${name}`;
+    const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+    window.location.href = `mailto:imanshaikh2912@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+
+  // Parallax blobs on mouse move
+  const blob1=document.getElementById('blob1'),blob2=document.getElementById('blob2'),blob3=document.getElementById('blob3');
+  document.addEventListener('mousemove',(e)=>{
+    const x=(e.clientX/window.innerWidth-0.5);
+    const y=(e.clientY/window.innerHeight-0.5);
+    blob1.style.transform=`translate(${x*40}px, ${y*40}px)`;
+    blob2.style.transform=`translate(${x*-50}px, ${y*-30}px)`;
+    blob3.style.transform=`translate(${x*30}px, ${y*50}px)`;
+  });
+</script>
+
+</body>
+</html>
